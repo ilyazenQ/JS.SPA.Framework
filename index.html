@@ -37,7 +37,7 @@
 
    </div>
    <script>
-      //state
+      //state(data)
       const state = {
          time:new Date(),
          lots: [  
@@ -56,26 +56,40 @@
 
          ],
       };
+      function App({state}) {
       const app = document.createElement('div');
       app.classList.add('app','container');
-
-      //elements
-
+      app.append(Header());
+      app.append(Clock({
+         time:state.time,
+      }));
+      app.append(Lots({lots:state.lots}));
+      return app;
+    }
+      
+      //components
+      function Header () {
       const header = document.createElement('header');
       header.classList.add('header');
-      
+      header.append(Logo());
+      return header
+      };
+
+      function Logo() {
       const logo = document.createElement('img');
       logo.classList.add('logo');
       logo.src = "https://lh3.googleusercontent.com/ogw/ADea4I4TUGGafgyc3doOQsqb8cI3WnImEAMviVkjvX8C=s83-c-mo";
+      return logo;
+      }
+      function Clock({time}) { 
      
-      
       const clock = document.createElement('div');
       clock.classList.add('clock','h2');
-      clock.innerText = "Time: " + state.time.toLocaleTimeString();
+      clock.innerText = "Time: " + time.toLocaleTimeString();
+      return clock;
+      }
 
-      const lots = document.createElement('div');
-      lots.classList.add("lots","container");
-      state.lots.forEach((lot) => {
+      function Lot({lot}) {
          const node = document.createElement('article');
          node.classList.add('lot','card','m-1');
 
@@ -94,18 +108,30 @@
          description.classList.add('description','card-text');
          description.innerText = lot.description;
          node.append(description);
+         return node;
+      } 
+      function Lots({lots}) {
+      const list = document.createElement('div');
+      list.classList.add("lots","container");
+      lots.forEach((lot) => {
 
-         lots.append(node);
+         list.append(Lot({lot}));
+
       })
-      header.append(logo);
-      app.append(header);
-      app.append(clock);
-      app.append(lots);
+      return list;
+   }
+      // rendering
+     const newDom = App({
+        state:state,
+     });
+     const domRoot = document.getElementById('root');
 
-      const domRoot = document.getElementById('root');
-
-      domRoot.append(app);
+      render(newDom,domRoot);
+   
       
+      function render(newDom,realDomRoot) {
+         realDomRoot.append(newDom);
+      }
    </script>
 
 </body>
