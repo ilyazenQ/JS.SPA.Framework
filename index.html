@@ -11,31 +11,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </head>
 <body>
-   <!-- 
-   <div class="app">
-      <header class="header">
-         <img src="" alt="Logo" class="logo">
-      </header>
-      <div class="clock h2">
-        Time: 12-12-12
-      </div>
-      <div class="lots container">
-         <article class="lot card">
-            <div class="card-body">
-            <div class="price card-text">
-               16
-            </div>
-            <h1 class="card-title">Title</h1>
-            <p class="card-text">Description</p>
-            
-            <hr>
-         </article>
-      </div>
-   </div>
-   -->
+ 
    <div id="root">
 
    </div>
+
    <script>
       // api method
       const api = {
@@ -226,9 +206,72 @@
          })
       })
 
-      function render(newDom,realDomRoot) {
-         realDomRoot.innerHTML = "";
-         realDomRoot.append(newDom);
+      function render(virtualDom,realDomRoot) {
+         const virtualDomRoot = document.createElement(realDomRoot.tagName);
+         virtualDomRoot.id = realDomRoot.id;
+         virtualDomRoot.append(virtualDom);
+         sync(virtualDomRoot,realDomRoot)
+      }
+
+      function sync(virtualNode, realNode) {
+         //sync element
+            if(virtualNode.id !== realNode.id) {
+               realNode.id = virtualNode.id
+            }
+            if(virtualNode.className !== realNode.className) {
+               realNode.className = virtualNode.className
+            } 
+            if(virtualNode.attributes) {
+               Array.from(virtualNode.attributes).forEach((attr) => {
+                  realNode[attr.name] = attr.value;
+               })
+            }
+            if(virtualNode.nodeValue !== realNode.nodeValuee) {
+               realNode.nodeValue = virtualNode.nodeValue
+            } 
+
+           // realNode.innerHTML = '';
+         //sync child elements 
+            const virtualChildren = virtualNode.childNodes;
+            const realChildren = realNode.childNodes;
+            for(let i = 0; i < virtualChildren.length || i < realChildren.length; i++) {
+
+               const virtual = virtualChildren[i];
+               const real = realChildren[i];
+               // remove old
+            if(virtual === undefined && real !== undefined) {
+               realNode.remove(real);
+            }
+
+               //update old
+               if(virtual !== undefined && real !== undefined && virtual.tagName === real.tagName) {
+                  sync(virtual,real);
+               }
+
+               //replace
+               if(virtual !== undefined && real !== undefined && virtual.tagName !== real.tagName) {
+                  let newReal = createRealNodeByVirtual(virtual);
+                  sync(virtual,newReal);
+                  realNode.replaceChild(newReal,real);
+               }
+               // add new
+            if(virtual !== undefined && real === undefined) {
+               let newReal = createRealNodeByVirtual(virtual);
+               sync(virtual,newReal);
+               realNode.appendChild(newReal);
+            }
+
+            }
+
+      }
+      function createRealNodeByVirtual(virtual) {
+         let newReal;
+               if(virtual.nodeType === Node.TEXT_NODE) {
+                   newReal = document.createTextNode('');
+               } else {
+                   newReal = document.createElement(virtual.tagName);
+               }
+               return newReal;
       }
    </script>
 
