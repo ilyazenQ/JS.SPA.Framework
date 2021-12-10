@@ -134,7 +134,70 @@ function Lots ({ lots }) {
     lots.map((lot) => VDom.createElement(Lot, { lot, key: lot.id }))
   )
 }
+      // Lot Before json
+   //   function Lot({lot}) {
+    //     const node = document.createElement('article');
+    //     node.classList.add('lot','card','m-1');
+    //     node.dataset.key = lot.id;
+//
+    //     const price = document.createElement('div');
+    //     price.classList.add('price','card-text');
+    //     price.innerText ="Price " + lot.price;
+     //    node.append(price);
+//
+     //    const name = document.createElement('h1');
+     //    name.classList.add('name','card-title');
+     //    name.innerText = lot.name;
+     //    node.append(name);
 
+         
+      //   const description = document.createElement('p');
+      //   description.classList.add('description','card-text');
+      //   description.innerText = lot.description;
+      //   node.append(description);
+       //  return node;
+     // } 
+
+     //Lot json
+  //   function Lot({lot}) {
+   //      return {
+    //        type:'div',
+    //        key:lot.id,
+    //        props: {
+    //           className:'lot article card m-1',
+    //           children: [ 
+    //              {
+    //                 type:'div',
+    //                 props: {
+    //                    className:'price card-text',
+    //                    children:[
+    //                       lot.price
+   //                     ]
+    //                 }
+    //              },
+     //             {
+     //                type:'h1',
+    //                 props:{
+    //                    className:'name card-title',
+    //                    children:[
+    //                       lot.name
+    //                    ]
+    //                 }
+    //              },
+     //             {
+     //                type:'p',
+     //                props: {
+     //                   className:'description card-text',
+     //                   children:[
+     //                      lot.description,
+     //                   ]
+     //                }
+     //             },
+     //          ]
+     //       }
+     //    }
+     // } 
+     // Lot as object
 function Lot ({ lot }) {
   return VDom.createElement('article', { className: 'lot article card m-1' },
     VDom.createElement('div', { className: 'price card-text' }, lot.price),
